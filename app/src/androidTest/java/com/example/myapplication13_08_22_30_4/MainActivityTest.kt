@@ -21,26 +21,7 @@ class MainActivityTest {
     //Вы уже знаете, для чего создаются Rule, но в первом примере вы видели устаревшую версию создания
     //В этом примере рекомендуемый на сегодняшний момент способ создания через ActivityScenarioRule
     val activityScenario = ActivityScenarioRule(MainActivity::class.java)
-    //Создаем метод, который возвращает объект ViewAction
-    private fun clickItemWithId(id: Int): ViewAction {
-        //Создаем анонимный класс, реализующий интерфейс ViewAction
-        return object : ViewAction {
-            //Здесь мы можем установить какие-либо ограничения для проверки с помощью Matcher
-            //например, чтобы View был виден на экране
-            override fun getConstraints(): Matcher<View>? {
-                return any(View::class.java)
-            }
-            //В этом методе мы возвращаем описание действия, оно должно быть лаконичным
-            override fun getDescription(): String {
-                return "Click on a child view with specified id."
-            }
-            //В этом методе совершаем действие над View
-            override fun perform(uiController: UiController, view: View) {
-                val v = view.findViewById<View>(id) as View
-                v.performClick()
-            }
-        }
-    }
+
     //Сам тест
     @Test
     fun test() {
@@ -49,5 +30,26 @@ class MainActivityTest {
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition<ItemViewHolder>(17, clickItemWithId(R.id.check_box)))
 
 
+    }
+}
+
+//Создаем метод, который возвращает объект ViewAction
+private fun clickItemWithId(id: Int): ViewAction {
+    //Создаем анонимный класс, реализующий интерфейс ViewAction
+    return object : ViewAction {
+        //Здесь мы можем установить какие-либо ограничения для проверки с помощью Matcher
+        //например, чтобы View был виден на экране
+        override fun getConstraints(): Matcher<View>? {
+            return any(View::class.java)
+        }
+        //В этом методе мы возвращаем описание действия, оно должно быть лаконичным
+        override fun getDescription(): String {
+            return "Click on a child view with specified id."
+        }
+        //В этом методе совершаем действие над View
+        override fun perform(uiController: UiController, view: View) {
+            val v = view.findViewById<View>(id) as View
+            v.performClick()
+        }
     }
 }
